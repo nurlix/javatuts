@@ -12,15 +12,41 @@ public class Main
         printJurnal(jurnalFiz);
 
         // Факультет математики
-        Jurnal jurnalMat = new Jurnal("MAT-1-20", createTabel(8, 20));
-        printJurnal(jurnalMat);
+        //Jurnal jurnalMat = new Jurnal("MAT-1-20", createTabel(8, 20));
+        //printJurnal(jurnalMat);
+
+        //------------------------
+        /*
+        Student s1 = new Student();
+        s1.FIO = "Попов";
+        s1.Kurs = 2;
+        Baza.addStudent(s1);
+
+        Student s2 = new Student("Marconi", 2);
+        Baza.addStudent(s2);
+
+        Jurnal jurnalIzb = new Jurnal("ИЗБ-1-20", createTabel(8, 20));
+        printJurnal(jurnalIzb);
+        */
     }
 
     static List<Tabel> createTabel(int from, int to)
     {
         List<Tabel> tabels = new ArrayList<>();
+
         for(Student student : Baza.getStudents(from, to))
         {
+            List<Predmet> predmets = new ArrayList<>()
+            {
+                {
+                    add(new Predmet("Математика", reiting()));
+                    add(new Predmet("Физика", reiting()));
+                    add(new Predmet("Тарых", reiting()));
+                }
+            };
+
+            student.predmets = predmets;
+
             Tabel tabel = new Tabel(student, visited());
             tabels.add(tabel);
         }
@@ -40,13 +66,25 @@ public class Main
                 vc = vc + i;
                 System.out.print(i + "\t");
             }
-            System.out.println(vc);
+            System.out.print(vc + "\t");
+
+            for(Predmet p : t.Student.predmets)
+            {
+                int itog = 0;
+                for(int i : p.reiting)
+                {
+                    itog += i;
+                }
+                System.out.print((itog / 3) + "\t");
+            }
+            System.out.print("\n");
+
         }
     }
 
     static void printTitle()
     {
-        String[] title = { String.format("%-25s", "ФИО"), "ПН\t", "ВТ\t", "СР\t", "ЧТ\t", "ПТ\t", "Итого\n" };
+        String[] title = { String.format("%-25s", "ФИО"), "ПН\t", "ВТ\t", "СР\t", "ЧТ\t", "ПТ\t", "Итого\t", "Мат\t", "Физ\t", "Тарых\n" };
 
         for(String str : title)
         {
@@ -60,6 +98,16 @@ public class Main
         for(int i = 0; i <= 4; i++)
         {
             vc[i] = (int)Math.round(Math.random());
+        }
+        return vc;
+    }
+
+    static int[] reiting()
+    {
+        int[] vc = new int[3];
+        for(int i = 0; i <= 2; i++)
+        {
+            vc[i] = (int)(Math.random() * 100);
         }
         return vc;
     }
